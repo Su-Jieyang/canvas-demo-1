@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>画板</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <canvas id="canvas" width="100" weight="100"></canvas>
     <script>
-        let canvas=document.getElementById("canvas");
-        canvas.width=document.documentElement.clientWidth
-        canvas.height=document.documentElement.clientHeight
-        let ctx=canvas.getContext("2d");
-        let painting=false
-        ctx.fillStyle="black";
-        ctx.strokeStyle='none'
-        canvas.onmousedown=()=>{
-            painting=true
-        }
-        canvas.onmousemove=(e)=>{
-            if(painting){
-                ctx.beginPath();
-                ctx.arc(e.clientX,e.clientY,10,0,2*Math.PI)
-                ctx.stroke()//描边
-                ctx.fill()//填充
-            }
-        }
-        canvas.onmouseup=()=>{
-            painting=false
-        }
+      let canvas = document.getElementById("canvas");
+      canvas.width = document.documentElement.clientWidth;
+      canvas.height = document.documentElement.clientHeight;
+      let ctx = canvas.getContext("2d");
+      let painting = false;
+      ctx.fillStyle = "black";
+      ctx.strokeStyle = "none";
+      var isTouchDevice = "ontouchstart" in document.documentElement; //是否支持触屏
+      if (isTouchDevice) {   
+          canvas.ontouchmove = (e) => {
+              let x = e.touches[0].clientX
+              let y = e.touches[0].clientY
+              ctx.beginPath()
+              ctx.arc(x,y,10,0,2 * Math.PI)
+              ctx.stroke()
+              ctx.fill()
+          }      
+        } else {
+        canvas.onmousedown = () => {
+          painting = true;
+        };
+        canvas.onmousemove = (e) => {
+          if (painting) {
+            ctx.beginPath();
+            ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
+            ctx.stroke(); //描边
+            ctx.fill(); //填充
+          }
+        };
+        canvas.onmouseup = () => {
+          painting = false;
+        };
+      }
     </script>
-</body>
+  </body>
 </html>
